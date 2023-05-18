@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/assets/style.css" type="text/css" rel="stylesheet" />
+    <title>Document</title>
+  </head>
+  <!-- Creamos la tabla con parametros EJS -->
+  <body>
+    <h1>Catálogo de personas</h1>
+    <form action="/find" method="POST">
+      <label for="criterio">Criterio:</label>
+      <input type="text" id="criteria" name="criteria" /><br /><br />
+      <input type="submit" value="Buscar" />
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Tipo de Sangre</th>
+          <th>NSS</th>
+          <th>Editar</th>
+          <th>Borrar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% Persons.forEach(function(paciente) { %>
+        <tr>
+          <td><%= paciente.nombre %></td>
+          <td><%= paciente.edad %></td>
+          <td><%= paciente.tipoSangre %></td>
+          <td><%= paciente.nss %></td>
+          <td>
+            <button>
+              <a href="<%= `findById/${paciente._id}` %>">Editar</a>
+            </button>
+          </td>
+          <td>
+            <button onclick="confirmDelete()">
+              <a href="<%= `deletePerson/${paciente._id}` %>">Borrar</a>
+            </button>
+            <script>
+              function confirmDelete() {
+                if (
+                  confirm("¿Estás seguro de que quieres borrar este elemento?")
+                ) {
+                  // Si el usuario confirma, redirige a la URL de borrado
+                  window.location.href =
+                    event.target.parentElement.querySelector("a").href;
+                } else {
+                  // Si el usuario cancela, no hagas nada
+                  return false;
+                }
+              }
+            </script>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+    <a href="/add">Agregar</a>
+  </body>
+</html>
